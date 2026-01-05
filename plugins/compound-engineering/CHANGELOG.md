@@ -5,6 +5,26 @@ All notable changes to the compound-engineering plugin will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.22.0] - 2026-01-05
+
+### Added
+
+- **`rclone` skill** - Upload files to S3, Cloudflare R2, Backblaze B2, and other cloud storage providers
+
+### Changed
+
+- **`/feature-video` command** - Enhanced with:
+  - Better ffmpeg commands for video/GIF creation (proper scaling, framerate control)
+  - rclone integration for cloud uploads
+  - Screenshot copying to project folder
+  - Improved upload options workflow
+
+### Summary
+
+- 27 agents, 20 commands, 13 skills, 2 MCP servers
+
+---
+
 ## [2.21.0] - 2026-01-05
 
 ### Fixed

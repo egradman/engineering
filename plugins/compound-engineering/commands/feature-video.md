@@ -24,7 +24,8 @@ This command creates professional video walkthroughs of features for PR document
 - Local development server running (e.g., `bin/dev`, `rails server`)
 - Playwright MCP server connected
 - Git repository with a PR to document
-- `ffmpeg` installed (for video conversion if needed)
+- `ffmpeg` installed (for video conversion)
+- `rclone` configured (optional, for cloud upload - see rclone skill)
 </requirements>
 
 ## Main Tasks
@@ -180,17 +181,28 @@ mcp__plugin_compound-engineering_pw__browser_take_screenshot({ filename: "tmp/sc
 ```
 
 **Create video/GIF from screenshots:**
+
 ```bash
-# Create GIF from screenshots
-ffmpeg -framerate 1 -pattern_type glob -i 'tmp/screenshots/*.png' \
+# Create directories
+mkdir -p tmp/videos tmp/screenshots
+
+# Create MP4 video (RECOMMENDED - better quality, smaller size)
+# -framerate 0.5 = 2 seconds per frame (slower playback)
+# -framerate 1 = 1 second per frame
+ffmpeg -y -framerate 0.5 -pattern_type glob -i '.playwright-mcp/tmp/screenshots/*.png' \
+  -c:v libx264 -pix_fmt yuv420p -vf "scale=1280:-2" \
+  tmp/videos/feature-demo.mp4
+
+# Create GIF (larger file, but works everywhere)
+ffmpeg -y -framerate 0.7 -pattern_type glob -i '.playwright-mcp/tmp/screenshots/*.png' \
   -vf "scale=1280:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" \
   -loop 0 tmp/videos/feature-demo.gif
 
-# Or create MP4 for better quality
-ffmpeg -framerate 1 -pattern_type glob -i 'tmp/screenshots/*.png' \
-  -c:v libx264 -pix_fmt yuv420p -vf "scale=1280:-1" \
-  tmp/videos/feature-demo.mp4
+# Copy screenshots to project folder for easy access
+cp -r .playwright-mcp/tmp/screenshots tmp/
 ```
+
+**Note:** The `-2` in scale ensures height is divisible by 2 (required for H.264).
 
 </record_walkthrough>
 
@@ -198,40 +210,23 @@ ffmpeg -framerate 1 -pattern_type glob -i 'tmp/screenshots/*.png' \
 
 <upload_video>
 
-**Option A: Upload to GitHub (via PR comment with attachment)**
+**Upload with rclone:**
 
-GitHub doesn't support direct video uploads via API, but you can:
-1. Drag-drop in browser, or
-2. Use a hosting service
-
-**Option B: Upload to transfer.sh (temporary, 14 days)**
 ```bash
-curl --upload-file tmp/videos/feature-demo.gif https://transfer.sh/feature-demo.gif
+# Check rclone is configured
+rclone listremotes
+
+# Upload video and screenshots to cloud storage
+rclone copy tmp/videos/feature-demo.mp4 r2:your-bucket/pr-videos/ --progress
+rclone copy tmp/screenshots/ r2:your-bucket/pr-videos/screenshots/ --progress
+
+# List uploaded files
+rclone ls r2:your-bucket/pr-videos/
 ```
 
-**Option C: Upload to Cloudflare R2/S3 (if configured)**
-```bash
-# If AWS CLI is configured
-aws s3 cp tmp/videos/feature-demo.gif s3://your-bucket/pr-videos/pr-[number]-demo.gif --acl public-read
+The public URL depends on your bucket configuration. For R2 with public access:
 ```
-
-**Option D: Keep local and provide path**
-```bash
-# Just provide the local path for manual upload
-echo "Video saved to: $(pwd)/tmp/videos/feature-demo.gif"
-```
-
-Ask user for upload preference:
-```markdown
-**Video Ready**
-
-Video saved to: `tmp/videos/feature-demo.gif`
-Size: [size]
-
-How would you like to share it?
-1. Upload to transfer.sh (temporary link, 14 days)
-2. Keep local - I'll upload manually
-3. Upload to S3/R2 (requires config)
+https://pub-XXXXX.r2.dev/pr-videos/feature-demo.mp4
 ```
 
 </upload_video>
