@@ -9,7 +9,7 @@ A Claude Code plugin marketplace featuring the **Compound Engineering Plugin** â
 /plugin install compound-engineering
 ```
 
-## OpenCode + Codex support (experimental) Install
+## OpenCode + Codex (experimental) Install
 
 This repo includes a Bun/TypeScript CLI that converts Claude Code plugins to OpenCode and Codex.
 
