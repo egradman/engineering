@@ -75,7 +75,9 @@ create_worktree() {
     exit 1
   fi
 
-  local worktree_path="$WORKTREE_DIR/$branch_name"
+  # Replace slashes in branch name with __ for directory name
+  local dir_name="${branch_name//\//__}"
+  local worktree_path="$WORKTREE_DIR/$dir_name"
 
   # Check if worktree already exists
   if [[ -d "$worktree_path" ]]; then
@@ -171,16 +173,18 @@ switch_worktree() {
     read -r worktree_name
   fi
 
-  local worktree_path="$WORKTREE_DIR/$worktree_name"
+  # Replace slashes with __ for directory lookup
+  local dir_name="${worktree_name//\//__}"
+  local worktree_path="$WORKTREE_DIR/$dir_name"
 
   if [[ ! -d "$worktree_path" ]]; then
-    echo -e "${RED}Error: Worktree not found: $worktree_name${NC}"
+    echo -e "${RED}Error: Worktree not found: $dir_name${NC}"
     echo ""
     list_worktrees
     exit 1
   fi
 
-  echo -e "${GREEN}Switching to worktree: $worktree_name${NC}"
+  echo -e "${GREEN}Switching to worktree: $dir_name${NC}"
   cd "$worktree_path"
   echo -e "${BLUE}Now in: $(pwd)${NC}"
 }
@@ -204,10 +208,12 @@ copy_env_to_worktree() {
       return 1
     fi
   else
-    worktree_path="$WORKTREE_DIR/$worktree_name"
+    # Replace slashes with __ for directory lookup
+    local dir_name="${worktree_name//\//__}"
+    worktree_path="$WORKTREE_DIR/$dir_name"
 
     if [[ ! -d "$worktree_path" ]]; then
-      echo -e "${RED}Error: Worktree not found: $worktree_name${NC}"
+      echo -e "${RED}Error: Worktree not found: $dir_name${NC}"
       list_worktrees
       return 1
     fi

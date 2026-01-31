@@ -25,6 +25,7 @@ The script handles critical setup that raw git commands don't:
 1. Copies `.env`, `.env.local`, `.env.test`, etc. from main repo
 2. Ensures `.worktrees` is in `.gitignore`
 3. Creates consistent directory structure
+4. Converts slashes in branch names to `__` for directory names (e.g., `feature/login` → `.worktrees/feature__login`)
 
 ```bash
 # ✅ CORRECT - Always use the script
