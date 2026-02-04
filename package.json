@@ -3,6 +3,13 @@
   "version": "0.1.1",
   "type": "module",
   "private": false,
+  "keywords": [
+    "pi-package",
+    "ai-powered",
+    "engineering",
+    "workflow-automation",
+    "code-review"
+  ],
   "bin": {
     "compound-plugin": "./src/index.ts"
   },
@@ -22,5 +29,12 @@
   },
   "devDependencies": {
     "bun-types": "^1.0.0"
+  },
+  "pi": {
+    "skills": ["./plugins/engineering/skills"],
+    "prompts": [
+      "./plugins/engineering/agents",
+      "./plugins/engineering/commands"
+    ]
   }
 }
