@@ -67,7 +67,7 @@ This command launches multiple specialized subagents IN PARALLEL to maximize eff
    - **security_issue** → `security-sentinel`
    - **database_issue** → `data-integrity-guardian`
    - **test_failure** → `cora-test-reviewer`
-   - Any code-heavy issue → `kieran-rails-reviewer` + `code-simplicity-reviewer`
+   - Any code-heavy issue → `code-simplicity-reviewer`
 
 ## What It Captures
 
@@ -125,7 +125,6 @@ Primary Subagent Results:
 
 Specialized Agent Reviews (Auto-Triggered):
   ✓ performance-oracle: Validated query optimization approach
-  ✓ kieran-rails-reviewer: Code examples meet Rails standards
   ✓ code-simplicity-reviewer: Solution is appropriately minimal
   ✓ every-style-editor: Documentation style verified
 
@@ -177,7 +176,6 @@ Build → Test → Find Issue → Research → Improve → Document → Validate
 Based on problem type, these agents can enhance documentation:
 
 ### Code Quality & Review
-- **kieran-rails-reviewer**: Reviews code examples for Rails best practices
 - **code-simplicity-reviewer**: Ensures solution code is minimal and clear
 - **pattern-recognition-specialist**: Identifies anti-patterns or repeating issues
 
