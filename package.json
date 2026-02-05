@@ -32,6 +32,7 @@
   },
   "pi": {
     "skills": ["./plugins/engineering/skills"],
+    "extensions": ["./extensions"],
     "prompts": [
       "./plugins/engineering/agents",
       "./plugins/engineering/commands"
