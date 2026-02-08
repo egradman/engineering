@@ -17,6 +17,24 @@ description: Parse a development plan into TodoWrite tasks, then spawn CC subage
 
 **If no plan document reference is provided**, ask: "Which plan file should I execute? Provide a path."
 
+## Precondition: Dangerously Skip Permissions
+
+**BLOCKING CHECK — do this before anything else.**
+
+Ask the user: "Do you have `--dangerously-skip-permissions` enabled for this session?"
+
+- If **yes**: proceed.
+- If **no** or **unsure**: **STOP.** Tell the user:
+  ```
+  This skill spawns autonomous worker subagents that need to write files,
+  run tests, and commit without permission prompts. It will not work
+  without --dangerously-skip-permissions.
+
+  Please quit and restart Claude Code with:
+    claude --dangerously-skip-permissions
+  ```
+  Do NOT proceed. Wait for the user to restart and re-invoke.
+
 ## Workflow
 
 ### Phase 1: Parse Plan -> Tasks
