@@ -19,7 +19,7 @@ preconditions:
 
 This skill captures problem solutions immediately after confirmation, creating structured documentation that serves as a searchable knowledge base for future sessions.
 
-**Organization:** Single-file architecture - each problem documented as one markdown file in its symptom category directory (e.g., `docs/solutions/performance-issues/n-plus-one-briefs.md`). Files use YAML frontmatter for metadata and searchability.
+**Organization:** Single-file architecture - each problem documented as one markdown file in its symptom category directory (e.g., `./docs/solutions/performance-issues/n-plus-one-briefs.md`). Files use YAML frontmatter for metadata and searchability.
 
 ---
 
@@ -37,8 +37,6 @@ This skill captures problem solutions immediately after confirmation, creating s
 - "working now"
 - "problem solved"
 - "that did it"
-
-**OR manual:** `/doc-fix` command
 
 **Non-trivial problems only:**
 
@@ -70,19 +68,17 @@ Extract from conversation history:
 
 **Environment details:**
 
-- Rails version
-- Stage (0-6 or post-implementation)
-- OS version
+- software version
+- task at hand
 - File/line references
 
-**BLOCKING REQUIREMENT:** If critical context is missing (module name, exact error, stage, or resolution steps), ask user and WAIT for response before proceeding to Step 3:
+**BLOCKING REQUIREMENT:** If critical context is missing ask user and WAIT for response before proceeding to Step 3:
 
 ```
 I need a few details to document this properly:
 
 1. Which module had this issue? [ModuleName]
 2. What was the exact error message or symptom?
-3. What stage were you in? (0-6 or post-implementation)
 
 [Continue after user provides details]
 ```
@@ -103,7 +99,7 @@ ls docs/solutions/[category]/
 
 **IF similar issue found:**
 
-THEN present decision options:
+THEN present decision options using AskUserQuestionTool:
 
 ```
 Found similar issue: docs/solutions/[path]
@@ -126,7 +122,7 @@ Proceed directly to Step 4 (no user interaction needed).
 <step number="4" required="true" depends_on="2">
 ### Step 4: Generate Filename
 
-Format: `[sanitized-symptom]-[module]-[YYYYMMDD].md`
+Format: `[sanitized-symptom]-[YYYY-MM-DD].md`
 
 **Sanitization rules:**
 
@@ -137,9 +133,9 @@ Format: `[sanitized-symptom]-[module]-[YYYYMMDD].md`
 
 **Examples:**
 
-- `missing-include-BriefSystem-20251110.md`
-- `parameter-not-saving-state-EmailProcessing-20251110.md`
-- `webview-crash-on-resize-Assistant-20251110.md`
+- `missing-include-BriefSystem-2025-11-10.md`
+- `parameter-not-saving-state-EmailProcessing-2025-11-10.md`
+- `webview-crash-on-resize-Assistant-2025-11-10.md`
 </step>
 
 <step number="5" required="true" depends_on="4" blocking="true">
@@ -459,7 +455,7 @@ Documentation is successful when ALL of the following are true:
    - Solution: Added eager loading with `includes(:emails)` on Brief model
    - Root cause: Missing eager loading causing separate database query per email thread
 3. **Check existing:** No similar issue found
-4. **Generate filename:** `n-plus-one-brief-generation-BriefSystem-20251110.md`
+4. **Generate filename:** `n-plus-one-brief-generation-BriefSystem-2025-11-10.md`
 5. **Validate YAML:**
    ```yaml
    module: Brief System
